@@ -119,7 +119,7 @@ CLIPNOTEMAP = ((-1, -1, -1, -1, -1, -1, -1, -1), #Row 1
 
 # Track Control
 MASTERSEL = 40 #Master track select
-TRACKSTOP = (-1, #Track 1 Clip Stop
+TRACKSTOP = (37, #Track 1 Clip Stop
              -1, #Track 2
              -1, #Track 3
              -1, #Track 4

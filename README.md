@@ -47,7 +47,7 @@ Once this is working better, would be implemented for other features like solo a
 
 CC Pads on bank A from 1 to 8 are: Overdub on/off, Loop on/off, Clip launch (Record if empty, play if recording, stop if playing), stop all clips, global record, switch clip/track view, metronome on/off, launch current scene.
 
-CC Pads on bank B from 1 to 8: Device lock, unused, Device left, Device right, Device on/off, unused, Device bank left, Device bank right.
+CC Pads on bank B from 1 to 8: Device lock, blank (change to 68 for Solo), Device left, Device right, Device on/off, blank (change to 72 for Mute), Device bank left, Device bank right.
 
 ### Preset 2
 
@@ -57,7 +57,7 @@ Encoder knobs 1-8: volume, pan, send-A, send-B, device param 1, master volume, s
 
 CC Pads Bank-A 1-8: same as preset 1. Overdub on/off, Loop on/off, Clip Fire (Record if empty, play if recording, stop if playing), stop all clips, global record, switch clip/track view, metronome on/off, launch current scene.
 
-CC Pads Bank-B 1-8: track select, blank, clip launch, stop all clips, select master, arm track, blank (change to 68 in editor to get solo), mute.
+CC Pads Bank-B 1-8: track select, track stop, clip launch, stop all clips, select master, arm track, blank (change to 68 in editor to get solo), mute.
 
 ### Preset 3
 
