@@ -27,6 +27,10 @@ The folder Presets had presets saved from MPK Mini editor which you can load eit
 
 The Editor folder also has screen shots if the presets don't work for some reason.
 
+### Printable template
+
+The PNG file in the root folder contains a scaled printable template that you can cut and put on the keyboard instead of tape and handwriting. Print on 100% with 72 dpi.
+
 ## What does it do
 
 I was using a bigger Novation Launchkey MKII and really liked the way it worked without the need to constantly reach for the mouse or keyboard during leisure playback or production. Which the much more compact MPK mini was lacking; although I have also taken a stab at performance but I guess that might still be better off with a Push or Novation product.
