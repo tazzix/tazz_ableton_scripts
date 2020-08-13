@@ -5,6 +5,7 @@ import Live
 import logging
 import math
 from _Framework.SessionComponent import SessionComponent
+from _Framework import Task
 from _Framework.ButtonElement import ButtonElement
 from .EncoderElement import EncoderElement
 from _Framework.Control import EncoderControl
@@ -19,6 +20,8 @@ class SpecialSessionComponent(SessionComponent):
 
     def __init__(self, control_surface, num_tracks, num_scenes, cc_type, midi_chan, hscroll, vscroll, padlights_enabled):
         SessionComponent.__init__(self, num_tracks, num_scenes)
+        self._arming_task = self._tasks.add(Task.sequence(Task.delay(1), self._arm_task))
+        self._arming_task.kill()
         self._slot_launch_button = None
         self._selected_scene_launch_button = None
         self._control_surface = control_surface
@@ -103,11 +106,13 @@ class SpecialSessionComponent(SessionComponent):
         all_tracks = self.song().tracks
         current_index = list(all_tracks).index(selected_track)
         self.set_offsets(current_index, self._scene_offset)
-        if self.song().exclusive_arm:
-            for track in all_tracks:
-                if track.can_be_armed and track.arm and track != selected_track:
-                    track.arm = False
-        if selected_track.can_be_armed: selected_track.arm = True
+        self._start_arming_task()
+        #if self.song().exclusive_arm:
+        #    for track in all_tracks:
+        #        if track.can_be_armed and track.arm and track != selected_track:
+        #            track.arm = False
+        #if selected_track.can_be_armed: selected_track.arm = True
+        
         # TODO: selected_track.set_arm_button, etc
         #if self._control_surface._mixer != None:
             #strip = self._control_surface._mixer.channel_strip(current_index)
@@ -186,11 +191,48 @@ class SpecialSessionComponent(SessionComponent):
             (self.song().view.highlighted_clip_slot.is_playing) and \
             not (self.song().view.highlighted_clip_slot.is_recording):
                 self.song().view.highlighted_clip_slot.stop()
+                #self._slot_launch_button.turn_off()
                 self._control_surface.padlights_switch(3, 1)
             elif ((value != 0) or (not self._slot_launch_button.is_momentary())):
                 if (self.song().view.highlighted_clip_slot != None):
                     self.song().view.highlighted_clip_slot.fire()
+                    #self._slot_launch_button.turn_on()
                     self._control_surface.padlights_switch(3, 2)
+
+
+    def _start_arming_task(self):
+        if self._arming_task.is_killed:
+            self._arming_task.restart()
+
+
+    def _track_to_arm(self):
+        track = self.song().view.selected_track
+        # can_arm_track = track != None and track.has_midi_input and track.can_be_armed and not track.arm
+        can_arm_track = track != None and track.can_be_armed and not track.arm
+        if can_arm_track:
+            return track
+
+
+    def _try_arm(self):
+        track_to_arm = self._track_to_arm()
+        if track_to_arm != None:
+            song = self.song()
+            tracks = song.tracks
+            check_arrangement = song.is_playing and song.record_mode
+            if song.exclusive_arm:
+                for track in tracks:
+                    if track.can_be_armed and track != track_to_arm:
+                        track.arm = False
+
+            track_to_arm.arm = True
+            track_to_arm.view.select_instrument()
+
+    def _arm_task(self, delta):
+        result_state = Task.KILLED
+        if self.is_enabled():
+            self._try_arm()
+        return result_state
+
 
 # local variables:
 # tab-width: 4

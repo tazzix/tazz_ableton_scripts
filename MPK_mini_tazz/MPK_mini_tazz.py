@@ -9,6 +9,7 @@ from __future__ import with_statement
 import Live
 from _Framework.ControlSurface import ControlSurface
 from _Framework.InputControlElement import *
+from _Framework import Task
 from _Framework.SliderElement import SliderElement
 from _Framework.ButtonElement import ButtonElement
 from _Framework.ButtonMatrixElement import ButtonMatrixElement
@@ -43,6 +44,8 @@ class MPK_mini_tazz(ControlSurface):
     def __init__(self, c_instance):
         ControlSurface.__init__(self, c_instance)
         #self.set_suppress_rebuild_requests(True)
+        self._padlighting_task = self._tasks.add(Task.sequence(Task.delay(1), self._padlight_task))
+        self._padlighting_task.kill()
         self.__c_instance = c_instance
         with self.component_guard():
             self._note_map = []
@@ -62,6 +65,9 @@ class MPK_mini_tazz(ControlSurface):
         self._do_combine()
         #self._horizontal_scroll_encoder = EncoderElement(MIDI_CC_TYPE, 0, 123, Live.MidiMap.MapMode.relative_smooth_two_compliment, name=u'Horizontal_Scroll_Encoder')
         #self._vertical_scroll_encoder = EncoderElement(MIDI_CC_TYPE, 0, 7, Live.MidiMap.MapMode.relative_smooth_two_compliment, name=u'Vertical_Scroll_Encoder')
+        self._padlights = []
+        for pad in range(PADCOUNT):
+            self._padlights.append(1)
 
 
     def send_midi(self, midi_event_bytes):
@@ -258,12 +264,17 @@ class MPK_mini_tazz(ControlSurface):
                     self._pads.append(pad)
             self.set_pad_translations(tuple(self._pads))
 
+    def padlights_update(self):
+            self._start_padlighting_task()
 
     def padlights_switch(self, pad_num, state):
         if PADLIGHTSENABLED==1 and pad_num <= PADCOUNT:
-            value = PADLIGHTOFF if (state==1) else PADLIGHTON
-            time.sleep(0.2)
-            self.send_midi((PADLIGHTMSG, PADOFFSET+pad_num, value))
+            self._padlights[pad_num] = state
+            self._start_padlighting_task()
+            
+            #value = PADLIGHTOFF if (state==1) else PADLIGHTON
+            #time.sleep(0.2)
+            #self.send_midi((PADLIGHTMSG, PADOFFSET+pad_num, value))
 
             #info = {"pad_num": pad_num, "state": state}
             #threading.Thread(target=self.padlights_worker, args=(info,)).start()
@@ -272,6 +283,24 @@ class MPK_mini_tazz(ControlSurface):
                 #self._padlights_thread = threading.Thread(target=self.padlights_worker, args=(self._padlights_info,))
                 #self._padlights_thread.start()
 
+    def _try_padlight(self):
+        for pad in range(PADCOUNT):
+            state = self._padlights[pad]
+            value = PADLIGHTOFF if (state==1) else PADLIGHTON
+            #time.sleep(0.2)
+            self.send_midi((PADLIGHTMSG, PADOFFSET+pad, value))
+
+
+    def _start_padlighting_task(self):
+        if self._padlighting_task.is_killed:
+            self._padlighting_task.restart()
+
+
+    def _padlight_task(self, delta):
+        result_state = Task.KILLED
+        if PADLIGHTSENABLED==1:
+            self._try_padlight()
+        return result_state
 
     u"""
     def padlights_worker(self, args):
