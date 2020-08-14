@@ -84,12 +84,11 @@ CC Pads Bank-B 5-8: Solo for tracks 1-4
 
 Uses Preset 4, details as under:
 
-                       Normal                            Shift                       Alt                                 
-K 1,2,3,4           Device Params                      Track Vol x4               Blank x4 (Blanks for mapping)
-K 5,6,7,8           D-5, M-Vol, Nav x2                 Track SendA x4             Blank x2, Nav x2
-
-B 32,68,34,35      Device R/L x2, toggle, lock        Track Solo x4              Track Select x4
-B 28,72,30,31      Track Arm x4                       Track Mute x4              Scene Launch, ..., Stop All
-
-A 26,22,27,23      Metro, Clip, Scene, Stop           Clip launch x4             Track Stop x4
-A 20,21,24,Sh      Overdub, Loop                      Sends U/D x2               Track R/L x2
+|Control|MIDI CC|Normal|Shift|Alt|
+|-------|-------|------|-----|---|
+|Encoders 1-4|1,2,3,4|Device Params|Track Vol x4|Blank x4 (Blanks for mapping)|
+|Encoders 5-8|5,6,7,8|D-5, M-Vol, Nav x2|Track Send x4|Blank x2, Nav x2|
+|Pads 5-8 Bank-B|32,68,34,35|Device R/L x2, toggle, lock|Track Solo x4|Track Select x4|
+|Pads 1-4 Bank-B|28,72,30,31|Track Arm x4|Track Mute x4|Scene Launch, ..., Stop All|
+|Pads 5-8 Bank-A|26,22,27,23|Metro, Clip, Scene, Stop|Clip launch x4|Track Stop x4|
+|Pads 1-4 Bank-A|20,21,Shift,Alt|Overdub, Loop|Sends U/D x2|Track R/L x2|
