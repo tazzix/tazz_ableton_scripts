@@ -45,7 +45,7 @@ session_right = 21
 
 #                   Normal                              Shift                       Alt                                 Shift-Alt (Ctrl) - Not implemented
 # 1,2,3,4           Device Params                      Track Vol *4               Blank *4 (Blanks for mapping)
-# 5,6,7,8           D-5, M-Vol, Nav *2                 Track SendA *4             Blank *2, Nav *2
+# 5,6,7,8           D-5, M-Vol, Nav *2                 Track Sends *4             Blank *2, Nav *2
 #-------------
 #B 32,68,34,35      Device R/L *2, toggle, lock        Track Solo *4              Track Select *4
 #B 28,72,30,31      Track Arm *4                       Track Mute *4              Scene Launch, ..., Stop All

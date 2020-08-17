@@ -78,6 +78,8 @@ class SpecialSessionComponent(SessionComponent):
             selected_track = all_tracks[idx]
             self.song().view.selected_track = selected_track
             self.on_selected_track_changed()
+            self._track_offset2 = idx
+            self.set_offsets(idx, self._scene_offset) # --move scene redbox with navigation-- 
             self.clipslot_updated()
 
 
@@ -91,9 +93,6 @@ class SpecialSessionComponent(SessionComponent):
         super(SessionComponent, self).on_selected_track_changed()
         selected_track = self.song().view.selected_track
         all_tracks = self.song().tracks
-        current_index = list(all_tracks).index(selected_track)
-        self._track_offset2 = current_index
-        self.set_offsets(current_index, self._scene_offset) # --move scene redbox with navigation-- 
         self._start_arming_task()
         
         # TODO: selected_track.set_arm_button, etc
